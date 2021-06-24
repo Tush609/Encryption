@@ -25,9 +25,8 @@ public class Newfile {
                         \t1. Edit File
                         \t2. Read File
                         \t3. Encrypt File
-                        \t4. Decrypt File
-                        \t5. Return to Previous Menu
-                        \t6. Exit
+                        \t4. Return to Previous Menu
+                        \t5. Exit
                         """
         );
 
@@ -38,7 +37,19 @@ public class Newfile {
 
         switch (choice){
 
-            case 1 -> this.Edit();
+            case 1,2 -> this.Edit();
+
+            case 3 -> new Encryption(new File(Fname));
+
+            case 4 -> new Menu();
+
+            case 5 -> System.exit(0);
+
+            default -> {
+                System.out.println("Error!! - Invaid Entry");
+                new Newfile(Fname,choice);
+            }
+
         }
     }
 
@@ -64,33 +75,13 @@ public class Newfile {
 
     void Edit() throws IOException {
 
-        Scanner a = new Scanner(System.in);
-
         Desktop.getDesktop().open(new File(Fname));
 
 
-        System.out.println("Do you want to Edit ?");
-        char ch = a.next().charAt(0);
-        if (ch == 'Y' || ch == 'y') {
-
-            fileeditor();
-
-        } else if (ch == 'N' || ch == 'n') {
-
-            new Newfile(Fname, choice);
-
-        }
-
-    }
-
-    private void fileeditor() throws IOException{
-
-        FileWriter fw = new FileWriter(Fname);
-
-        
+        new Newfile(Fname, choice);
 
 
-        fw.close();
+
     }
 
 }
