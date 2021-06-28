@@ -30,6 +30,7 @@ public class Menu {
             case 1 -> {
                 System.out.println("\nEnter the name of the File : ");
                 Fname = b.nextLine();
+                Fname += ".enc";
                 new Newfile(Fname, choice);
             }
 

@@ -33,9 +33,9 @@ public class Newfile {
         System.out.println("Enter Your Choice : ");
 
         Scanner a = new Scanner(System.in);
-        int choice = a.nextInt();
+        int ch = a.nextInt();
 
-        switch (choice){
+        switch (ch){
 
             case 1,2 -> this.Edit();
 

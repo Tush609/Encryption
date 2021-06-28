@@ -1,4 +1,7 @@
-import java.io.*;
+import java.io.File;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.Random;
 import java.util.Scanner;
 
@@ -11,14 +14,13 @@ public class Encryption{
     int offset = 0;
     String eno;
     char[] letter ;
-    String content;
+    String content,Enc;
     int[] L;
-
+    int num;
 
     Encryption(File Fname) throws IOException {
 
         this.Fname = Fname;
-        String P = String.valueOf(Fname);
 
         fr = new FileReader(Fname);
 
@@ -35,19 +37,6 @@ public class Encryption{
         }
         content = new String(letter);
 
-        String[] p = P.split("\\\\", 0);
-        int path = p.length - 1;
-        String filename = p[p.length - 1];
-
-        String Path = "";
-        for (int i = 0; i < path; i++) {
-            Path += p[i] + File.separator;
-        }
-
-        File temp = new File(Path + "temp.enc");
-
-        fw = new FileWriter(temp);
-
         System.out.println(
                 """
                         \t1. Cipher
@@ -57,7 +46,7 @@ public class Encryption{
                         Enter The Encryption Technique :"""
         );
 
-        int num = ch.nextInt();
+        num = ch.nextInt();
 
         switch (num) {
 
@@ -74,42 +63,42 @@ public class Encryption{
 
         }
 
+
+        fw = new FileWriter(Fname);
+        fw.write(Enc);
+
+        System.out.println(Enc);
+
+
+        System.out.println("\nEncrypted !!");
+
         fw.close();
         fr.close();
 
     }
 
-    public void cipher() throws IOException {
-
-
-
-        String content = new String(letter);
-        String Enc = "";
+    public void cipher() {
 
         Random rand = new Random();
-        int a = rand.nextInt(255);
+        int a = rand.nextInt(10);
 
         eno = String.valueOf(a);
         System.out.println(content);
 
-        int flag = -1;
-        System.out.println('\\');
         for (int i=0;i<Fname.length();i++) {
-
-            System.out.println(letter[i]);
 
             if (letter[i] == '\n') {
                 continue;
             }
             letter[i] = (char) (letter[i] + a);
-            System.out.println(letter[i]);
-            content = new String(letter);
         }
-        System.out.println(content);
+        Enc = new String(letter);
 
-
-        System.out.println("Encrypted !!");
-
+        if (a%10 >= 1) {
+            Enc += num + String.valueOf(a);
+        } else {
+            Enc += num + '0' + a;
+        }
     }
 
     public void palindrome() {
