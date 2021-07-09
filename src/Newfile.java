@@ -7,6 +7,7 @@ public class Newfile {
 
     private final String Fname;
     private final int choice;
+    String ent;
 
     Newfile(String Fname,int num) throws IOException {
 
@@ -34,9 +35,22 @@ public class Newfile {
         Scanner a = new Scanner(System.in);
         int ch = a.nextInt();
 
+        Scanner c = new Scanner(System.in);
         switch (ch){
 
-            case 1,2 -> this.Edit();
+            case 1,2 -> {
+                if (Fname.startsWith("enc", Fname.length()-3)) {
+                    Decryption d = new Decryption(new File(Fname));
+                    Desktop.getDesktop().open(new File(Fname));
+                    do {
+                        System.out.println("Press Enter to Continue !!");
+                        ent = c.nextLine();
+                    } while (ent != "");
+                    new Encryption(new File(Fname), d.eno);
+                } else {
+                    this.Edit();
+                }
+            }
 
             case 3 -> new Encryption(new File(Fname));
 

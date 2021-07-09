@@ -1,7 +1,4 @@
-import java.io.File;
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.IOException;
+import java.io.*;
 import java.util.Random;
 import java.util.Scanner;
 
@@ -10,22 +7,24 @@ public class Encryption{
     final File Fname;
     Scanner ch = new Scanner(System.in);
     FileReader fr;
-    FileWriter fw;
+    FileOutputStream fw;
     int offset = 0;
     String eno;
+    String SFname;
     char[] letter ;
     String content,Enc;
-    int[] L;
     int num;
 
-    Encryption(File Fname) throws IOException {
+    Encryption(File Fname, int num) throws IOException {
+
 
         this.Fname = Fname;
+        this.num = num;
 
         fr = new FileReader(Fname);
 
         letter = new char[(int) Fname.length()];
-        L = new int[(int) Fname.length()];
+
 
         while (offset < letter.length)
         {
@@ -37,10 +36,56 @@ public class Encryption{
         }
         content = new String(letter);
 
+
+        if (num == 1) {
+            cipher();
+        }
+        else if (num == 2) {
+            palindrome();
+        }
+
+
+        fw = new FileOutputStream(Fname);
+
+        DataOutputStream dos = new DataOutputStream(fw);
+        dos.writeBytes(Enc);
+
+        dos.close();
+        fw.close();
+        fr.close();
+
+    }
+
+    Encryption(File Fname) throws IOException {
+
+        this.Fname = Fname;
+        this.SFname = Fname.getName();
+
+        this.SFname = SFname.substring(0, SFname.length() - 4) + ".enc";
+
+        fr = new FileReader(Fname);
+
+        letter = new char[(int) Fname.length()];
+
+
+        while (offset < letter.length)
+        {
+            int result = fr.read(letter, offset, letter.length - offset);
+            if (result == -1) {
+                break;
+            }
+            offset += result;
+        }
+
+
+        content = new String(letter);
+
+
+
         System.out.println(
                 """
-                        \t1. Cipher
-                        \t2. Palindrome
+                        \t1. KEY 1
+                        \t2. KEY 2
                         \t3. Exit
                                               
                         Enter The Encryption Technique :"""
@@ -64,26 +109,35 @@ public class Encryption{
         }
 
 
-        fw = new FileWriter(Fname);
-        fw.write(Enc);
+        fw = new FileOutputStream(Fname);
 
-        System.out.println(Enc);
-
+        DataOutputStream dos = new DataOutputStream(fw);
+        dos.writeBytes(Enc);
 
         System.out.println("\nEncrypted !!");
 
+        dos.close();
         fw.close();
         fr.close();
+
+        if (Fname.renameTo(new File(SFname))) {
+
+        } else {
+            System.out.println("Cannot Rename");
+        }
+
 
     }
 
     public void cipher() {
 
         Random rand = new Random();
-        int a = rand.nextInt(10);
 
-        eno = String.valueOf(a);
-        System.out.println(content);
+        int a=4;
+//        while (a == 0) {
+//            a = rand.nextInt(100);
+//        }
+        eno = String.format("%02d",a);
 
         for (int i=0;i<Fname.length();i++) {
 
@@ -94,17 +148,22 @@ public class Encryption{
         }
         Enc = new String(letter);
 
-        if (a%10 >= 1) {
-            Enc += num + String.valueOf(a);
-        } else {
-            Enc += num + '0' + a;
-        }
+
+        Enc += String.valueOf(eno) + String.valueOf(num);
     }
 
     public void palindrome() {
 
+        char temp;
 
-        System.out.println("Encrypted !!");
+        for (int i=0;i<letter.length/2;i++){
+            temp = letter[i];
+            letter[i] = letter[letter.length-1-i];
+            letter[letter.length-1-i] = temp;
+        }
+
+        Enc = new String(letter);
+        Enc += num;
 
     }
 
